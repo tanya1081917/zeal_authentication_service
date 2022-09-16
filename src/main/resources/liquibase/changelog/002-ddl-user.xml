@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+	logicalFilePath="db/changelog/changelogs/002-ddl-user.xml"
+	objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+	<changeSet id="1" author="liquibaseUser">
+		<comment>Create User table which will contain User details</comment>
+
+		<createTable tableName="MSW_USER">
+			<column name="USR_ID_X" type="varchar(50)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="USR_EMAIL_X" type="varchar(250)">
+				<constraints nullable="false" />
+			</column>
+			<column name="USR_MOB_X" type="varchar(250)">
+				<constraints nullable="false" />
+			</column>
+			<column name="USR_ACC_STATUS_C" type="varchar(250)">
+				<constraints nullable="false" />
+			</column>
+			<column name="LOCK_VER_N" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="DELETED_I" type="boolean" defaultValue="false">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="2" author="liquibaseUser">
+		<comment>Create USER_FAVORITES table which will contain user favorite entries
+		</comment>
+		<createTable tableName="USER_FAVORITE">
+			<column name="USR_FAV_ID_N" type="numeric(20)"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="USR_ID_X" type="varchar(50)">
+				<constraints nullable="false"
+					foreignKeyName="userfavorites_user_fk"
+					referencedTableName="MSW_USER" referencedColumnNames="USR_ID_X" />
+			</column>
+			<column name="REF_ID_X" type="varchar(250)">
+				<constraints nullable="false" />
+			</column>
+			<column name="FAV_C" type="varchar(250)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CRT_ON_DT" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="LAST_UPDATED_ON_DT" type="datetime" />
+			<column name="LOCK_VER_N" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="DELETED_I" type="boolean" defaultValue="false">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+</databaseChangeLog>

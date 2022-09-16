@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+	logicalFilePath="db/changelog/changelogs/002-ddl-pre-arrival-application.xml"
+	objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+	<changeSet id="1" author="authorizationService">
+		<comment>Create Roles table which will contain Role information</comment>
+		<createTable tableName="ROLE">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ROLE_NAME" type="varchar(250)">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="IS_DELETED" type="bit" defaultValue="false">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LOCK_VERSION" type="int">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_ON" type="datetime">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_BY" type="varchar(100)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LAST_UPDATED_ON" type="datetime"/>
+           <column name="LAST_UPDATED_BY" type="varchar(100)"/>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="2" author="authorizationService">
+		<comment>Create the resources table which will contain resource related information</comment>
+		<createTable tableName="ACL_RESOURCE">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="PARENT_ID" type="int" >
+				<constraints nullable="true" foreignKeyName="FK_ACL_RESOURCE" 
+					referencedTableName="ACL_RESOURCE" referencedColumnNames="ID" />							
+			</column>
+			<column name="RESOURCE_NAME" type="varchar(250)" >
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="RESOURCE_TYPE" type="varchar(250)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="RESOURCE_DESCRIPTION" type="varchar(250)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="IS_DELETED" type="bit" defaultValue="false">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LOCK_VERSION" type="int">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_ON" type="datetime">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_BY" type="varchar(100)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LAST_UPDATED_ON" type="datetime"/>
+           <column name="LAST_UPDATED_BY" type="varchar(100)"/>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="3" author="authorizationService">
+		<comment>Create resource group table which will contain the information about resource groups</comment>
+		<createTable tableName="RESOURCE_GROUP">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="RESOURCE_GROUP_NAME" type="varchar(250)">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="IS_DELETED" type="bit" defaultValue="false">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LOCK_VERSION" type="int">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_ON" type="datetime">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_BY" type="varchar(100)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LAST_UPDATED_ON" type="datetime"/>
+           <column name="LAST_UPDATED_BY" type="varchar(100)"/>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="4" author="authorizationService">
+		<comment>Create User group table which will contain User group information</comment>
+		<createTable tableName="USER_GROUP">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="USER_GROUP_NAME" type="varchar(250)">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="IS_DELETED" type="bit" defaultValue="false">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LOCK_VERSION" type="int">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_ON" type="datetime">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_BY" type="varchar(100)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LAST_UPDATED_ON" type="datetime"/>
+           <column name="LAST_UPDATED_BY" type="varchar(100)"/>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="5" author="authorizationService">
+		<comment>Mapping table for roles and resources</comment>
+		<createTable tableName="ROLE_RESOURCE_PERMISSION">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ROLE_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RORP_ROLE_01"
+					referencedTableName="ROLE"
+					referencedColumnNames="ID" />
+			</column>
+			<column name="ACL_RESOURCE_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RORP_ACLR_02"
+					referencedTableName="ACL_RESOURCE"
+					referencedColumnNames="ID" />
+			</column>
+		</createTable>
+	</changeSet>
+	
+	
+	<changeSet id="6" author="authorizationService">
+		<comment>Mapping table for resource group and resources</comment>
+		<createTable tableName="RESOURCE_GROUP_ACL_RESOURCE">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="RESOURCE_GROUP_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RGAR_RGRP_01"
+					referencedTableName="RESOURCE_GROUP"
+					referencedColumnNames="ID" />
+			</column>
+			<column name="ACL_RESOURCE_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RGAR_ACLR_02"
+					referencedTableName="ACL_RESOURCE"
+					referencedColumnNames="ID" />
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="7" author="authorizationService">
+		<comment>Mapping table for user group and role</comment>
+		<createTable tableName="USER_GROUP_ROLE">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="USER_GROUP_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_UGRR_UGRP_01"
+					referencedTableName="USER_GROUP"
+					referencedColumnNames="ID" />
+			</column>
+			<column name="ROLE_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_UGRR_ROLE_02"
+					referencedTableName="ROLE"
+					referencedColumnNames="ID" />
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="8" author="authorizationService">
+		<comment>Mapping table for resource group and role</comment>
+		<createTable tableName="RESOURCE_GROUP_ROLE">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="RESOURCE_GROUP_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RGPR_RGRP_01"
+					referencedTableName="RESOURCE_GROUP"
+					referencedColumnNames="ID" />
+			</column>
+			<column name="ROLE_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RGPR_ROLE_02"
+					referencedTableName="ROLE"
+					referencedColumnNames="ID" />
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="9" author="authorizationService">
+		<comment>Create ACL_RESOURCE_PERMISSION table which will contain the information about ACL Resource permissions</comment>
+		<createTable tableName="ACL_RESOURCE_ACCESS_PERMISSION">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ACL_RESOURCE_ID" type="int" >
+				<constraints nullable="true" foreignKeyName="FK_ACL_RESOURCE_01" 
+					referencedTableName="ACL_RESOURCE" referencedColumnNames="ID" />							
+			</column>
+			<column name="ACCESS_PERMISSION" type="varchar(250)" />
+			<column name="IS_DELETED" type="bit" defaultValue="false">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LOCK_VERSION" type="int">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_ON" type="datetime">
+               <constraints nullable="false"/>
+           </column>
+           <column name="CREATED_BY" type="varchar(100)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="LAST_UPDATED_ON" type="datetime"/>
+           <column name="LAST_UPDATED_BY" type="varchar(100)"/>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="10" author="authorizationService">
+		<comment>Mapping table for resource group and role</comment>
+		<createTable tableName="ROLE_ACCESS_PERM">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ACCESS_PERM_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RAPR_ACLP_01"
+					referencedTableName="ACL_RESOURCE_ACCESS_PERMISSION"
+					referencedColumnNames="ID" />
+			</column>
+			<column name="ROLE_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RAPR_ACLP_02"
+					referencedTableName="ROLE"
+					referencedColumnNames="ID" />
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="11" author="authorizationService">
+		<comment>Mapping table for resource group and role</comment>
+		<createTable tableName="RESOURCE_GROUP_ACCESS_PERM">
+			<column name="ID" type="int"
+				autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ACCESS_PERM_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RGAP_ACLP_01"
+					referencedTableName="ACL_RESOURCE_ACCESS_PERMISSION"
+					referencedColumnNames="ID" />
+			</column>
+			<column name="RESOURCE_GROUP_ID" type="int" >
+				<constraints nullable="false"
+					foreignKeyName="FK_RGAP_RGRP_02"
+					referencedTableName="RESOURCE_GROUP"
+					referencedColumnNames="ID" />
+			</column>
+		</createTable>
+	</changeSet>
+
+</databaseChangeLog>
